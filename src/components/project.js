@@ -3,23 +3,24 @@ import ProjectItem from "./projectItem";
 
 class Project extends Component {
 
-  render() {
-  	let projectItems;
+  	render() {
+	  	let projectItems;
 
-	if(this.props.projects) {
-	  	projectItems = this.props.projects.map(project => {
-	  		
-	  		return (
-	  			<ProjectItem key={project.title} project={project} />
-	  		)
-	  	});
-	 }
+		if(this.props.projects) {
+		  	projectItems = this.props.projects.map(project => {
+		  		
+		  		return (
+		  			<ProjectItem key={project.title} project={project} />
+		  		)
+		  	});
+		}
 
-	return (
-		<div className="Project">
-		  {projectItems}
-		</div>
-	);
+		return (
+			<div className="Project">
+				<h3>Latest Projects</h3>
+			  {projectItems}
+			</div>
+		);
 	}
 }
 
