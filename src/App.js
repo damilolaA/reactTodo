@@ -5,6 +5,7 @@ import rp from "request-promise";
 
 import Project from "./components/project";
 import AddProject from "./components/addProject";
+import Todos from "./components/todos";
 import './App.css';
 
 class App extends Component {
@@ -23,7 +24,7 @@ class App extends Component {
       .then(function(data) {
 
         self.setState({todos:data}, function() {
-          console.log(self.state.todos);
+          //console.log(self.state.todos);
         })
       })
       .catch(function(err) {
@@ -52,9 +53,9 @@ class App extends Component {
     this.getTodos();
   }
 
-  componentDidMount() {
+  /*componentDidMount() {
     this.getTodos();
-  }
+  }*/
 
   handleAddProject(project) {
     let projects = this.state.projects
@@ -83,6 +84,7 @@ class App extends Component {
         <AddProject addProject={this.handleAddProject.bind(this)}/>
 
         <Project projects={this.state.projects} onDelete={this.handleDeleteProject.bind(this)}/>
+        <Todos todos={this.state.todos}/>
       </div>
     );
   }
