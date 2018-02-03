@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import uuid from "uuid";
+import request from "request";
+import rp from "request-promise";
 
 import Project from "./components/project";
 import AddProject from "./components/addProject";
@@ -10,11 +12,26 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      projects: []
+      projects: [],
+      todos: []
     }
   }
 
-  componentWillMount() {
+  getTodos() {
+    let self = this;
+    rp("https://jsonplaceholder.typicode.com/todos")
+      .then(function(data) {
+
+        self.setState({todos:data}, function() {
+          console.log(self.state.todos);
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+      })
+  }
+
+  getProjects() {
     this.setState({projects: [
         {   
           id: uuid.v4(),
@@ -27,6 +44,16 @@ class App extends Component {
           category: "Web Development"
         }
     ]})
+  }
+
+  componentWillMount() {
+    this.getProjects()
+
+    this.getTodos();
+  }
+
+  componentDidMount() {
+    this.getTodos();
   }
 
   handleAddProject(project) {
