@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import uuid from "uuid";
-import request from "request";
-import rp from "request-promise";
 
 import Project from "./components/project";
 import AddProject from "./components/addProject";
@@ -20,15 +18,23 @@ class App extends Component {
 
   getTodos() {
     let self = this;
-    rp("https://jsonplaceholder.typicode.com/todos")
-      .then(function(data) {
 
-        self.setState({todos:data}, function() {
-          //console.log(self.state.todos);
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then(function(response) {
+        if(response.status !== 200) {
+          console.log("An error occured with status: " + response.status);
+          return;
+        }
+
+        response.json().then(function(data) {
+          let todos = self.state.todos;
+
+          todos.push(data);
+          self.setState(todos);
         })
       })
       .catch(function(err) {
-        console.log(err);
+        return console.log(err);
       })
   }
 
@@ -78,13 +84,27 @@ class App extends Component {
     this.setState(projects)
   }
 
+  deleteTodo(id) {
+    let todos = this.state.todos[0];
+
+    todos.forEach(function(todo) {
+      let index = todo;
+
+      if(index.id === id) {
+        todos.splice(index, 1);
+      }
+    })
+
+    this.setState(todos);
+  }
+
   render() {
     return (
       <div className="App">
         <AddProject addProject={this.handleAddProject.bind(this)}/>
 
         <Project projects={this.state.projects} onDelete={this.handleDeleteProject.bind(this)}/>
-        <Todos todos={this.state.todos}/>
+        <Todos todos={this.state.todos[0]} onDelete={this.deleteTodo.bind(this)}/>
       </div>
     );
   }

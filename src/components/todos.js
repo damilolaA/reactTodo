@@ -1,19 +1,23 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import TodosItems from "./todoItem";
 
 class Todos extends Component {
+
+	deleteTodo(id) {
+		this.props.onDelete(id);
+	}
 
 	render() {
 		let todoItem;
 
 		if(this.props.todos) {
 			let todoDetails = this.props.todos;
-			console.log(todoDetails.length);
-			todoItem = todoDetails.forEach(todo => {
+			todoItem = todoDetails.map(todo => {
 
 				return (
-					<TodosItems todo={todo}/>
+					<TodosItems key={todo.title} todo={todo} todoDelete={this.deleteTodo.bind(this)}/>
 				)
 			})
 		}
@@ -26,6 +30,11 @@ class Todos extends Component {
 		)
 	}
 
+}
+
+Todos.propTypes = {
+	todos: PropTypes.array,
+	onDelete: PropTypes.func
 }
 
 export default Todos;
